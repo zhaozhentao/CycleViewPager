@@ -1,0 +1,4 @@
+# CycleViewPager
+拓展ViewPager使之能循环滚动
+
+目前限制viewpager最少要有4个item
