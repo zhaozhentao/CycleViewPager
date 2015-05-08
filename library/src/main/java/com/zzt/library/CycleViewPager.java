@@ -1019,6 +1019,7 @@ public class CycleViewPager extends ViewGroup {
             final int clientWidth = getClientWidth();
             final float leftWidthNeeded = clientWidth <= 0 ? 0 :
                     2.f - curItem.widthFactor + (float) getPaddingLeft() / (float) clientWidth;
+
             final int nl = mCurItem - 2;
             for (int pos = mCurItem - 1; pos >= 0 || pos >= nl; pos--) {
                 if (extraWidthLeft >= leftWidthNeeded && pos < startPos) {
@@ -1027,6 +1028,7 @@ public class CycleViewPager extends ViewGroup {
                     }
                     if (pos == ii.position && !ii.scrolling) {
                         mItems.remove(itemIndex);
+
                         if(pos >= 0) {
                             mAdapter.destroyItem(this, pos % N, ii.object);
                         }else{
@@ -1059,6 +1061,32 @@ public class CycleViewPager extends ViewGroup {
                         ii = mItems.get(id);
                     }
                 } else {
+                    //检查要准备加载出来的这一项是否已经被加载，如果是则要先销毁
+                    int tempPos;
+                    if(pos >= 0) {
+                        tempPos = pos % N;
+                    }else{
+                        if((pos % mAdapter.getCount()) != 0)
+                            tempPos = mAdapter.getCount() - (-pos)%mAdapter.getCount();
+                        else
+                            tempPos = 0;
+                    }
+                    for(int j=0; j<mItems.size(); j++){
+                        int tempItemPosition;
+                        int itemPosition = mItems.get(j).position;
+                        if(itemPosition >= 0) {
+                            tempItemPosition = itemPosition % N;
+                        }else{
+                            if((itemPosition % mAdapter.getCount()) != 0)
+                                tempItemPosition = mAdapter.getCount() - (-itemPosition)%mAdapter.getCount();
+                            else
+                                tempItemPosition = 0;
+                        }
+                        if(tempPos == tempItemPosition){
+                            mAdapter.destroyItem(this, tempPos, mItems.get(j));
+                            mItems.remove(j);
+                        }
+                    }
                     ii = addNewItem(pos, itemIndex + 1);
                     extraWidthLeft += ii.widthFactor;
                     curIndex++;

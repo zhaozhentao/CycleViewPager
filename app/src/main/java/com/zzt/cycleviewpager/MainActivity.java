@@ -27,7 +27,6 @@ public class MainActivity extends ActionBarActivity {
         pages.add(LayoutInflater.from(this).inflate(R.layout.page1, null));
         pages.add(LayoutInflater.from(this).inflate(R.layout.page2, null));
         pages.add(LayoutInflater.from(this).inflate(R.layout.page3, null));
-        pages.add(LayoutInflater.from(this).inflate(R.layout.page2, null));
 
         cycleViewPager.setAdapter(new PagerAdapter() {
             @Override
